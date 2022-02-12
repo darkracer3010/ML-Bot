@@ -56,7 +56,7 @@ const Form = ()=>{
                     name="description"
                     id='description'
                     cols="25"
-                    rows="10"
+                    rows="4"
                     placeholder="Tell About the data used and purpose.."
                     
                     ></textarea>
@@ -75,4 +75,4 @@ const Form = ()=>{
         );
 
 }
-export default Form
+export default Form;

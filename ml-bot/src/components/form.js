@@ -2,21 +2,24 @@
 import React, { useState } from "react";
 import axios from "axios";
 import '../public/form.css'
+
+
 const Form = ()=>{
     const [userName, setuserName] = useState('')
     const [noOfAttr, setnoOfAttr] = useState(0)
     const [typeofLearning, settypeofLearning] = useState('')
-    
+    const [filedata, setfiledata] = useState({})
+
     const data={
         name:userName,
         attr:noOfAttr,
         learning:typeofLearning,
-        
+        data:filedata
     };
 
     const SubmitData=async (e)=>{
         await axios.post("http://localhost:{port}/api/",data);
-        console.log("send")
+        console.log(data)
     }
     
     return (
@@ -56,7 +59,7 @@ const Form = ()=>{
                     name="description"
                     id='description'
                     cols="25"
-                    rows="4"
+                    rows="10"
                     placeholder="Tell About the data used and purpose.."
                     
                     ></textarea>
@@ -66,7 +69,12 @@ const Form = ()=>{
                     type="file"
                     id="data"
                     name="data"
-                    
+                    onChange={(e)=>{
+                        let files=e.target.files
+                        setfiledata({files:files[0]},()=>{console.log(files)});
+                        console.log(files[0])
+                        console.log(data)
+                    }}
                     ></input>
             <br></br>
                     <input type="submit" value="Submit" onClick={SubmitData}></input>
@@ -75,4 +83,4 @@ const Form = ()=>{
         );
 
 }
-export default Form;
+export default Form

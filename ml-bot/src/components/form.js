@@ -14,7 +14,7 @@ const Form = ()=>{
         name:userName,
         attr:noOfAttr,
         learning:typeofLearning,
-        data:filedata
+        info:filedata
     };
 
     const SubmitData=async (e)=>{
@@ -71,8 +71,13 @@ const Form = ()=>{
                     name="data"
                     onChange={(e)=>{
                         let files=e.target.files
-                        setfiledata({files:files[0]},()=>{console.log(files)});
+                        //setfiledata({files:files[0]},()=>{console.log(files)});
                         console.log(files[0])
+                        var reader = new FileReader()
+                        reader.onload=function(e){
+                            data.info=reader.result
+                        }
+                        reader.readAsText(files[0])
                         console.log(data)
                     }}
                     ></input>

@@ -146,7 +146,11 @@ def check(data):
 check("data.csv")
 def predict(X):
     global model,dm
-    if(model!="linear"):
-        return float(dm[model].predict(X))
+    if(model=="Polynomial"):
+            polynomial_features=PolynomialFeatures(degree=2)
+            X=polynomial_features.fit_transform(X)
+            return float(dm["Polynomial"].predict(X))    
+    elif(model!="Linear"):
+        return float(dm[model].predict(X))    
     return float(dm['Linear'][0]*X +dm['Linear'][1])
 print(predict(np.array([3000]).reshape(-1,1)))

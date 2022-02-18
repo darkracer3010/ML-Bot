@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from io import StringIO
 import urllib, base64
 model=None
-dm={'Linear':None,'Polynomial':None,'Logistic':None,'Decision Tree':None,'Lasso':None,'Ridge':None,'ElasticNet':None}
+dm={'Linear':None,'Polynomial':None,'Logistic':None,'Lasso':None,'Ridge':None,'ElasticNet':None}
 def linear(csv):
     global dm
     h=[]
@@ -74,20 +74,6 @@ def log(csv):
     dm['Logistic']=regressor
     h.append(score)
     return h
-def dec(csv):
-    global dm
-    h=[]
-    data=pd.read_csv(csv)
-    X=data.iloc[:,:-1].values
-    Y=data.iloc[:,-1].values
-    X_train, X_test, Y_train, Y_test=train_test_split(X, Y, test_size=0.33, random_state=42)
-    regressor = DecisionTreeRegressor() 
-    regressor.fit(X, Y)
-    y_pred = regressor.predict(X_test)
-    score =r2_score(Y_test, y_pred)
-    dm['Decision Tree']=regressor
-    h.append(score)
-    return h
 def elasti(csv):
     global dm
     h=[]
@@ -134,19 +120,24 @@ def check(data):
     o=linear(data)
     o1=polynomial(data)
     o2=log(data)
-    o3=dec(data)
+    # o3=dec(data)
     o4=elasti(data)
     o5=ridge(data)
     o6=lasso(data)
-    l1=["Linear","Polynomial","Logistic","Decision Tree","ElasticNet","Ridge","Lasso"]
-    p=[o,o1,o2,o3,o4,o5,o6]
+    l1=["Linear","Polynomial","Logistic","ElasticNet","Ridge","Lasso"]
+    p=[o,o1,o2,o4,o5,o6]
     ind=p.index(max(p))
     global model
     model=l1[ind]
-check("data.csv")
+check("sal.csv")
 def predict(X):
     global model,dm
-    if(model!="linear"):
-        return float(dm[model].predict(X))
-    return float(dm['Linear'][0]*X +dm['Linear'][1])
-print(predict(np.array([3000]).reshape(-1,1)))
+    if(model=="Polynomial"):
+            polynomial_features=PolynomialFeatures(degree=2)
+            X=polynomial_features.fit_transform(X)
+            return float(dm["Polynomial"].predict(X))    
+    elif(model!="Linear"):
+        return float(dm[model].predict(X))    
+    return float((dm['Linear'][0])*X +dm['Linear'][1])
+print(model)
+print(predict(np.array([3500]).reshape(-1,1)))
